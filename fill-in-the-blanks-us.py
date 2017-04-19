@@ -2,6 +2,7 @@
 
 # IPND Stage 2 Final Project
 
+# Initialize the question bank
 quiz_easy = {'topic': '''So now we know some ways to make comparisons. We want
 to use them to make decisions, to make our code do something different,
 depending on the result of a comparison. The way to do that is to use an
@@ -39,16 +40,16 @@ quiz_all['easy'] = quiz_easy
 quiz_all['medium'] = quiz_medium
 quiz_all['hard'] = quiz_hard
 
-#让玩家输入题目难度，限定格式
+#Let the player enter the difficulty
 while True:
-	level = raw_input('Please select the topic of difficulty: easy, medium or hard\n')
+	level = raw_input('Select the topic of difficulty: easy, medium or hard\n')
 	if level not in ['easy','medium','hard']:
 		print 'Your input is not correct!:(\n'
 	else:
 		break
-#让玩家输入错误次数，限定格式
+#Let the player enter the maximum number of errors
 while True:
-	error_max_input = raw_input('Please select the maximum number of wrong answers: 1-9\n')
+	error_max_input = raw_input('Select the maximum number of wrong answers: 1-9\n')
 	error_max = int(error_max_input)
 	if error_max not in [1,2,3,4,5,6,7,8,9]:
 		print 'Your input is not correct!:(\n'
@@ -57,8 +58,8 @@ while True:
 
 
 def replace(quiz, blank):
-	#输入当前题目和答案序号，将题目对应空白处替换为正确答案，
-	#并返回替换答案后的题目
+	#Input the current question and blank,
+	#and replace the question blank with the correct answer
 	quiz_old = quiz['topic']
 	quiz_new = ''
 	i = 0
@@ -74,36 +75,35 @@ def replace(quiz, blank):
 	return quiz
 
 
-#题目中的填空
+#The blank in the question
 blank = ['___1___','___2___','___3___','___4___']
-#答错次数
+
 error_num = 0
-#玩家所选难度的对应题目
+#The quiz corresponding of the difficulty
 quiz_current = quiz_all[level]
 
-#对 blank 中的每一个空位编号处理：
+# for each blank in question
 for e in blank:
-	#展示当前题目
+	#show the question
 	print 'The question is: \n\n' + quiz_current['topic']
-	#错误次数上限内，使玩家输入答案，判断是否答对
+	#input the answer and judge
 	while error_num <= error_max:
 		answer = raw_input('\nPlease type in '+ e +' possible words:\n')
 		if answer != quiz_current[e]:
 			error_num += 1
 			print 'I\'m sorry you got it wrong!\n'
 		else:
-			#答对后退出while循环，进行下一个空位答题
 			if e == '___4___':
 				print 'Congratulations! You have finished the quiz!\n'
 			else:
 				print 'Great job!\n'
 			break
-	#while 循环结束后，判断是因为答对还是错误达到上限
+	#after the while loop, to see if the upper limit is reached
 	if error_num <= error_max:
-		#答对则用答案替换掉空位
+		#Replace the space in the question
 		quiz_current = replace(quiz_current, e)
 		error_num = 0
 	else:
-		#答错次数上限，退出程序
+		#Reach the upper limit and exit the game
 		print 'You have reached the maximum number of mistakes!T__T\n'
 		break

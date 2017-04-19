@@ -77,12 +77,17 @@ for e in blank:
 			error_num += 1
 		else:
 			#答对后退出while循环，进行下一个空位答题
-			print '恭喜你答对了！\n'
+			if e == '___4___':
+				#如果已达到最后一题，则提示全部成功
+				print '恭喜你完成所有填空！撒花！'
+			else:
+				print '恭喜你答对了！\n'
 			break
 	#while 循环结束后，判断是因为答对还是错误达到上限
 	if error_num <= error_max:
 		#答对则用答案替换掉空位
 		quiz_current = replace(quiz_current, e)
+		error_num = 0
 	else:
 		#答错次数上限，退出程序
 		print '错误次数已达上限，答题失败T__T\n'
