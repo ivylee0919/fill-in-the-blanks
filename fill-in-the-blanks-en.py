@@ -91,7 +91,7 @@ for e in blank:
 		answer = raw_input('\nPlease type in '+ e +' possible words:\n')
 		if answer != quiz_current[e]:
 			error_num += 1
-			print 'I\'m sorry you got it wrong!\n'
+			print 'I\'m sorry you got it wrong!Try again!\n'
 		else:
 			if e == '___4___':
 				print 'Congratulations! You have finished the quiz!\n'
