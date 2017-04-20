@@ -18,31 +18,36 @@ quiz_hard = {'题目': '岐王宅里___1___见，崔九___2___几度闻。正是
 '___3___': '好风景',
 '___4___': '落花时节'}
 
-quiz_all = {}
-quiz_all['简单'] = quiz_easy
-quiz_all['中等'] = quiz_medium
-quiz_all['困难'] = quiz_hard
+quiz_all = {'简单': quiz_easy,
+			'中等': quiz_medium,
+			'困难':quiz_hard}
+blank = ['___1___','___2___','___3___','___4___']
 
 #让玩家输入题目难度，限定格式
-while True:
-	level = raw_input('请选择题目难度：简单、中等、困难\n')
-	if level not in ['简单','中等','困难']:
-		print '您输入的难度格式不正确！:(\n'
-	else:
-		break
+def choose_level():
+	'''让玩家输入题目难度，限定格式，返回难度'''
+	while True:
+		level = raw_input('请选择题目难度：简单、中等、困难\n')
+		if level not in ['简单','中等','困难']:
+			print '您输入的难度格式不正确！:(\n'
+		else:
+			return level
+
 #让玩家输入错误次数，限定格式
-while True:
-	error_max_input = raw_input('请选择答错次数上限（1-9），超过上限答题失败！\n')
-	error_max = int(error_max_input)
-	if error_max not in [1,2,3,4,5,6,7,8,9]:
-		print '您输入的格式不正确！:(\n'
-	else:
-		break
+def error_times_max():
+	'''让玩家输入错误次数，限定格式，格式正确则返回'''
+	while True:
+		error_max_input = raw_input('请选择答错次数上限（1-9），超过上限答题失败！\n')
+		error_max = int(error_max_input)
+		if error_max not in [1,2,3,4,5,6,7,8,9]:
+			print '您输入的格式不正确！:(\n'
+		else:
+			return error_max
 
 
 def replace(quiz, blank):
-	#输入当前题目和答案序号，将题目对应空白处替换为正确答案，
-	#并返回替换答案后的题目
+	'''输入当前题目和答案序号，将题目对应空白处替换为正确答案，
+	并返回替换答案后的题目'''
 	quiz_old = quiz['题目']
 	quiz_new = ''
 	i = 0
@@ -57,38 +62,39 @@ def replace(quiz, blank):
 	quiz['题目'] = quiz_new
 	return quiz
 
+def guess(quiz, blank_num, error_max):
+	'''传入题目，空位，最大答错次数，玩家输入答案，判断对错
+	返回玩家答错次数。'''
+	error_num = 0
+	while error_num <= error_max:
+		answer = raw_input('\nn请输入'+ blank_num +'可能的词：\n')
+		if answer != quiz_current[blank_num]:
+			error_num += 1
+			print '很遗憾你答错了！再试一下！\n'
+		else:
+			if blank_num == '___4___':
+				print '恭喜你完成所有填空！撒花！\n'
+			else:
+				print '恭喜你答对了！继续下一空！\n'
+			break
+	return error_num
 
-#题目中的填空
-blank = ['___1___','___2___','___3___','___4___']
-#答错次数
-error_num = 0
-#玩家所选难度的对应题目
-quiz_current = quiz_all[level]
 
-#对 blank 中的每一个空位编号处理：
+#开始游戏
+quiz_current = quiz_all[choose_level()]
+error_max = error_times_max()
+
 for e in blank:
 	#展示当前题目
-	print '当前题目：\n' + quiz_current['题目']
-	#错误次数上限内，使玩家输入答案，判断是否答对
-	while error_num <= error_max:
-		answer = raw_input('\n请输入'+ e +'可能的词：\n')
-		if answer != quiz_current[e]:
-			print '很遗憾你答错了！\n'
-			error_num += 1
-		else:
-			#答对后退出while循环，进行下一个空位答题
-			if e == '___4___':
-				#如果已达到最后一题，则提示全部成功
-				print '恭喜你完成所有填空！撒花！'
-			else:
-				print '恭喜你答对了！\n'
-			break
-	#while 循环结束后，判断是因为答对还是错误达到上限
+	print '当前题目：\n\n' + quiz_current['topic']
+	#输入答案判断对错，记录错误次数
+	error_num = guess(quiz_current, e, error_max)
+	#判断是否达到最大错误次数，没有达到就是回答正确
 	if error_num <= error_max:
-		#答对则用答案替换掉空位
+		#回答正确，替换空位
 		quiz_current = replace(quiz_current, e)
-		error_num = 0
+		
 	else:
-		#答错次数上限，退出程序
+		#回答错误，结束游戏
 		print '错误次数已达上限，答题失败T__T\n'
 		break
