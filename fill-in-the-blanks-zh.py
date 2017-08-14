@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+﻿
 # IPND Stage 2 Final Project
 
 import locale
@@ -83,7 +83,7 @@ def guess(quiz, blank_num, error_max):
 
 
 #开始游戏
-def main(quiz_all):
+def main():
 	quiz_current = quiz_all[choose_level()]
 	error_max = error_times_max()
 
@@ -102,7 +102,9 @@ def main(quiz_all):
 			#回答错误，结束游戏
 			print u'\n错误次数已达上限，答题失败/(ㄒoㄒ)/~~\n'.encode(code)
 			break
+	
+	print (u'\n你最终完成的题目如下：\n\n' + quiz_current[u'题目']).encode(code)
 
 if __name__ == '__main__':
-	main(quiz_all)
+	main()
 
